@@ -11,6 +11,7 @@ import com.yandex.practicum.middle_homework_4.data.database.entity.News
 import com.yandex.practicum.middle_homework_4.data.database.entity.RemoteKeys
 import com.yandex.practicum.middle_homework_4.ui.contract.NewsService
 import java.io.IOException
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 
@@ -85,8 +86,8 @@ class NewsRemoteMediator(
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (error: IOException) {
             return MediatorResult.Error(error)
-        } catch (error: HttpException) {
-            return MediatorResult.Error(error)
+        } catch (e: Exception) {
+            return MediatorResult.Error(e)
         }
     }
 

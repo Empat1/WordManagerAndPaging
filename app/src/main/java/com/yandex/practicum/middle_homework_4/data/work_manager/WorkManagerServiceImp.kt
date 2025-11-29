@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import androidx.work.Constraints
+import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
@@ -39,12 +40,24 @@ class WorkManagerServiceImp(
     }
 
     private fun createConstraints(): Constraints {
+
+        return Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
         // Реализуйте метод, возвращающий Constraints
         // В условиях укажите необходимость наличия интернет соединения.
     }
 
     private fun createRequest(repeat: Long, delayed: Long): PeriodicWorkRequest {
         val networkConstraints = createConstraints()
+        return PeriodicWorkRequestBuilder<RefreshWorker>(
+            repeatInterval = repeat,
+            repeatIntervalTimeUnit = TimeUnit.MINUTES,
+            flexTimeInterval = delayed,
+            flexTimeIntervalUnit = TimeUnit.SECONDS
+        ).setConstraints(networkConstraints)
+            .build()
+
         // Допишите реализацию метода и верните WorkRequest на периодическую задачу для RefreshWorker
         // Интервал запуска задачи (в минутах)  = repeat.
         // Отсрочка запуска задачи в (секундах) = delayed.
